@@ -17,14 +17,16 @@ namespace EMS_Core_WebAPI.Controllers
             _employeeRepository = employeeRepository;
         }
 
-        [HttpGet(Name = "GetDepartments")]
+        // GET api/Employee/GetDepartments
+        [HttpGet("GetDepartments", Name = "GetDepartments")]
         public async Task<IActionResult> GetDepartments(CancellationToken cancellationToken = default)
         {
             var departments = await _employeeRepository.GetAllAsync(cancellationToken).ConfigureAwait(false);
             return Ok(departments);
         }
 
-        [HttpGet(Name = "GetEmployeeList")]
+        // GET api/Employee/GetEmployeeList
+        [HttpGet("GetEmployeeList", Name = "GetEmployeeList")]
         public async Task<IActionResult> GetEmployeeList()
         {
             try
@@ -38,7 +40,8 @@ namespace EMS_Core_WebAPI.Controllers
             }
         }
 
-        [HttpPost(Name = "AddEmployee")]
+        // POST api/Employee/AddEmployee
+        [HttpPost("AddEmployee", Name = "AddEmployee")]
         public async Task<ActionResult> AddEmployee([FromBody] AddEmployeeRequest request, CancellationToken cancellationToken = default)
         {
             if(request == null)
