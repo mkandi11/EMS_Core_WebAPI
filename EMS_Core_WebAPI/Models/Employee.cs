@@ -36,7 +36,6 @@ namespace EMS_Core_WebAPI.Models
 
     public class Salary
     {
-        public int EmployeeID { get; set; }
         public decimal? Basic { get; set; }
         public decimal? HRA { get; set; }
         public decimal? Misc { get; set; }
@@ -48,8 +47,10 @@ namespace EMS_Core_WebAPI.Models
         public string[]? Skills { get; set; }
     }
 
-    public class AddEmployeeRequest
+    public class EmployeeCompleteDetails
     {
+        public int EmployeeID { get; set; }
+
         [Required, MaxLength(100)]
         public string FirstName { get; set; } = null!;
 
@@ -64,6 +65,8 @@ namespace EMS_Core_WebAPI.Models
 
         [Required]
         public int DepartmentID { get; set; }
+
+        public string? DepartmentName { get; set; }
 
         public int? ExperienceInMonths { get; set; }
 

@@ -1,5 +1,10 @@
 using EMS_Core_WebAPI.Helper;
 using EMS_Core_WebAPI.Repositories;
+using EMS_Core_WebAPI.Services;
+using EMS_Framework_WebAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer; // Required for JWT
+using Microsoft.IdentityModel.Tokens; // Required for JWT
+using System.Text; // Required to encode JWT key
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -21,9 +26,30 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Below are add for JWT authentication
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+    options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(key)
+        };
+    });
+
 // Register raw ADO.NET repository
 builder.Services.AddScoped<DBConnection>();
 builder.Services.AddScoped<EmployeeRepository>();
+
+// Register Services
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
@@ -38,6 +64,9 @@ app.UseHttpsRedirection();
 
 // Apply CORS policy before authentication/authorization middleware
 app.UseCors("AllowLocalhost5173");
+
+// Add Authentication Middleware
+app.UseAuthentication();
 
 app.UseAuthorization();
 
