@@ -5,6 +5,8 @@ using EMS_Framework_WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer; // Required for JWT
 using Microsoft.IdentityModel.Tokens; // Required for JWT
 using System.Text; // Required to encode JWT key
+using EMS_Core_WebAPI.Middlewares;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -69,6 +71,8 @@ app.UseCors("AllowLocalhost5173");
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
 

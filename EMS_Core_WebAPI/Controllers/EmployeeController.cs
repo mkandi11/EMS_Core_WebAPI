@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using EMS_Core_WebAPI.Models;
 using EMS_Core_WebAPI.Repositories;
-using EMS_Core_WebAPI.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace EMS_Core_WebAPI.Controllers
 {
@@ -58,6 +59,7 @@ namespace EMS_Core_WebAPI.Controllers
         }
 
         // POST api/Employee/AddEmployee
+        [Authorize(Roles = "Admin,Manager")]
         [HttpPost("AddEmployee", Name = "AddEmployee")]
         public async Task<IActionResult> AddEmployee([FromBody] EmployeeCompleteDetails request, CancellationToken cancellationToken = default)
         {
@@ -83,6 +85,7 @@ namespace EMS_Core_WebAPI.Controllers
         }
 
         // PUT api/Employee/UpdateEmployee
+        [Authorize(Roles = "Admin,Manager")]
         [HttpPut("UpdateEmployee", Name = "UpdateEmployee")]
         public async Task<IActionResult> UpdateEmployee([FromBody] EmployeeCompleteDetails request, CancellationToken cancellationToken = default)
         {
@@ -107,6 +110,7 @@ namespace EMS_Core_WebAPI.Controllers
         }
 
         // DELETE api/Employee/DeleteEmployee
+        [Authorize(Roles = "Admin")]
         [HttpDelete("DeleteEmployee/{EmployeeID}", Name = "DeleteEmployee")]
         public async Task<IActionResult> DeleteEmployee(int EmployeeID)
         {
